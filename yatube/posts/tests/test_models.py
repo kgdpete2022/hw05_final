@@ -1,12 +1,10 @@
 from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 from ..models import Group, Post, User
 from .test_views import SMALL_GIF, TEMP_MEDIA_ROOT
 
 
 import shutil
-import tempfile
 
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -24,7 +22,7 @@ class PostModelTests(TestCase):
             name='small.gif',
             content=SMALL_GIF,
             content_type='image/gif'
-        )        
+        )
         cls.post = Post.objects.create(
             text='Текст тестового поста 1',
             author=cls.user,

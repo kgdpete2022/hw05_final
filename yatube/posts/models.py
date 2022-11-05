@@ -20,7 +20,7 @@ class Post(models.Model):
         verbose_name='Текст поста',
         help_text='Введите текст поста'
     )
-    pub_date = models.DateTimeField(        
+    pub_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Дата публикации',
     )
@@ -39,7 +39,7 @@ class Post(models.Model):
         verbose_name='Группа',
         help_text='Группа, к которой будет относиться пост'
     )
-    image = models.ImageField(        
+    image = models.ImageField(
         upload_to='posts/',
         blank=True,
         verbose_name='Изображение',
@@ -70,7 +70,7 @@ class Comment(models.Model):
         verbose_name="Текст комментария",
         help_text='Введите текст комментария'
     )
-    created=models.DateTimeField(
+    created = models.DateTimeField(
         verbose_name="Дата добавления комментария",
         auto_now_add=True
     )
@@ -86,7 +86,7 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower'        
+        related_name='follower'
     )
     author = models.ForeignKey(
         User,

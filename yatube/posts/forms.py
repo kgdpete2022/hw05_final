@@ -13,6 +13,7 @@ class PostForm(forms.ModelForm):
             'group': _('Укажите группу, к которой относится данный пост'),
         }
 
+
 class CommentForm(forms.ModelForm):
 
     class Meta:

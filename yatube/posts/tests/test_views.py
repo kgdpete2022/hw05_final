@@ -11,12 +11,12 @@ import tempfile
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 SMALL_GIF = (
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+    b'\x47\x49\x46\x38\x39\x61\x02\x00'
+    b'\x01\x00\x80\x00\x00\x00\x00\x00'
+    b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+    b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+    b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+    b'\x0A\x00\x3B'
 )
 
 
@@ -35,7 +35,7 @@ class PostFormTests(TestCase):
             name='small.gif',
             content=SMALL_GIF,
             content_type='image/gif'
-        )        
+        )
         cls.post = Post.objects.create(
             text='Текст тестового поста 1',
             author=cls.user,
@@ -43,7 +43,7 @@ class PostFormTests(TestCase):
             image=cls.image
         )
 
-    
+
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -136,8 +136,6 @@ class PostFormTests(TestCase):
         self.assertEqual(post_from_context.pub_date, self.post.pub_date)
         self.assertEqual(post_from_context.author, self.post.author)
         self.assertEqual(post_from_context.image, self.post.image)
-
-
         self.assertEqual(response.context['posts_count'], Post.objects.filter(
             author=self.post.author).count()
         )
