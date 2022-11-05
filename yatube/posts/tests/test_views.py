@@ -43,7 +43,6 @@ class PostFormTests(TestCase):
             image=cls.image
         )
 
-
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()

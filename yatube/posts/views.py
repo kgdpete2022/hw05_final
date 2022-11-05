@@ -1,5 +1,5 @@
 from django.shortcuts import (
-    render, get_object_or_404, get_list_or_404, redirect
+    render, get_object_or_404, redirect
 )
 
 from django.core.paginator import Paginator
@@ -162,8 +162,9 @@ def profile_follow(request, username):
     author = User.objects.filter(username=username)[0]
     if not Follow.objects.filter(
         user=request.user, author=author).exists() and author != request.user:
-        Follow.objects.create(user=request.user, author=author
-    )
+            Follow.objects.create(
+                user=request.user, author=author
+            )
     return redirect('posts:profile', author)
 
 
