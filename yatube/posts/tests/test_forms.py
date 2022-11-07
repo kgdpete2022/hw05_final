@@ -39,7 +39,6 @@ class PostFormTests(TestCase):
             image=cls.image
         )
 
-
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -101,7 +100,6 @@ class PostFormTests(TestCase):
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.group.pk, form_data['group'])
 
-
     def test_edit_post_nonauthor(self):
         """Проверка редактирования поста авторизованным пользователем,
         не являющимся автором этого поста"""
@@ -122,7 +120,6 @@ class PostFormTests(TestCase):
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.group.pk, form_data['group'])
 
-
     def test_edit_post_anonymous(self):
         """Проверка редактирования поста неавторизованным пользователем"""
         form_data = {
@@ -142,4 +139,3 @@ class PostFormTests(TestCase):
         post = Post.objects.get(pk=self.post.pk)
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.group.pk, form_data['group'])
-  

@@ -37,7 +37,9 @@ class PaginatorViewsTest(TestCase):
         }
 
         number_of_full_pages = NUMBER_OF_TEST_POSTS // settings.POSTS_PER_PAGE
-        number_of_posts_on_last_page = NUMBER_OF_TEST_POSTS % settings.POSTS_PER_PAGE
+        number_of_posts_on_last_page = (
+            NUMBER_OF_TEST_POSTS % settings.POSTS_PER_PAGE
+        )
 
         for page_number in range(number_of_full_pages):
             for url in tested_urls:
