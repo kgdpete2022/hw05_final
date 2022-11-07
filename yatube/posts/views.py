@@ -41,6 +41,7 @@ def group_posts(request, slug):
 def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
+    is_author = author == request.user
     posts_list = Post.objects.filter(author=author)
     paginator = Paginator(posts_list, settings.POSTS_PER_PAGE)
     page_number = request.GET.get('page')
@@ -54,6 +55,7 @@ def profile(request, username):
         'page_obj': page_obj,
         'posts_count': posts_count,
         'author': author,
+        'is_author': is_author,
         'following': following,
     }
     return render(request, template, context)
@@ -64,7 +66,6 @@ def post_detail(request, post_id):
     post = Post.objects.get(pk=post_id)
     posts_count = Post.objects.filter(author=post.author).count()
     user_posts_link = 'profile/' + post.author.username
-    is_authenticated = not request.user.username is None
     is_author = post.author == request.user
     comment_form = CommentForm()
     comments = Comment.objects.filter(post=post)
@@ -73,7 +74,6 @@ def post_detail(request, post_id):
         'posts_count': posts_count,
         'user_posts_link': user_posts_link,
         'post_id': post_id,
-        'is_authenticated': is_authenticated,
         'is_author': is_author,
         'comment_form': comment_form,
         'comments': comments,
@@ -161,6 +161,5 @@ def profile_follow(request, username):
 @login_required
 def profile_unfollow(request, username):
     author = User.objects.filter(username=username)[0]
-    if Follow.objects.filter(user=request.user, author=author).exists():
-        Follow.objects.filter(user=request.user, author=author).delete()
+    Follow.objects.filter(user=request.user, author=author).delete()
     return redirect('posts:profile', author)
