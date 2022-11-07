@@ -2,8 +2,6 @@ from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from ..models import Group, Post, User
 from .test_views import SMALL_GIF, TEMP_MEDIA_ROOT
-
-
 import shutil
 
 

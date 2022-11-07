@@ -1,23 +1,20 @@
-from django.shortcuts import (
-    render, get_object_or_404, redirect
-)
+from django.shortcuts import render, get_object_or_404, redirect
 
 from django.core.paginator import Paginator
 
 from django.contrib.auth.decorators import login_required
+
+from django.conf import settings
 
 from .models import Post, Group, User, Comment, Follow
 
 from .forms import PostForm, CommentForm
 
 
-POSTS_PER_PAGE = 10
-
-
 def index(request):
     template = 'posts/index.html'
     post_list = Post.objects.all()
-    paginator = Paginator(post_list, POSTS_PER_PAGE)
+    paginator = Paginator(post_list, settings.POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -30,7 +27,7 @@ def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     post_list = Post.objects.filter(group=group)
-    paginator = Paginator(post_list, POSTS_PER_PAGE)
+    paginator = Paginator(post_list, settings.POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -45,15 +42,13 @@ def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
     posts_list = Post.objects.filter(author=author)
-    paginator = Paginator(posts_list, POSTS_PER_PAGE)
+    paginator = Paginator(posts_list, settings.POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     posts_count = posts_list.count()
-    following = False
-    if request.user.id:
-        following = Follow.objects.filter(
-            author=author, user=request.user
-        ).exists()
+    following = request.user.is_authenticated and Follow.objects.filter(
+        user=request.user, author=author
+    ).exists()
     context = {
         'posts_list': posts_list,
         'page_obj': page_obj,
@@ -69,12 +64,8 @@ def post_detail(request, post_id):
     post = Post.objects.get(pk=post_id)
     posts_count = Post.objects.filter(author=post.author).count()
     user_posts_link = 'profile/' + post.author.username
-    is_authenticated = False
-    if request.user.username:
-        is_authenticated = True
-    is_author = False
-    if post.author == request.user:
-        is_author = True
+    is_authenticated = not request.user.username is None
+    is_author = post.author == request.user
     comment_form = CommentForm()
     comments = Comment.objects.filter(post=post)
     context = {
@@ -148,7 +139,7 @@ def follow_index(request):
             post_list = post_list | Post.objects.filter(
                 author=subscription.author
             )
-    paginator = Paginator(post_list, POSTS_PER_PAGE)
+    paginator = Paginator(post_list, settings.POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {

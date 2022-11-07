@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from ..models import Post, Group, User
-from ..views import POSTS_PER_PAGE
+from django.conf import settings
 
 NUMBER_OF_TEST_POSTS = 16
 
@@ -36,15 +36,15 @@ class PaginatorViewsTest(TestCase):
                     kwargs={'username': self.author}),
         }
 
-        number_of_full_pages = NUMBER_OF_TEST_POSTS // POSTS_PER_PAGE
-        number_of_posts_on_last_page = NUMBER_OF_TEST_POSTS % POSTS_PER_PAGE
+        number_of_full_pages = NUMBER_OF_TEST_POSTS // settings.POSTS_PER_PAGE
+        number_of_posts_on_last_page = NUMBER_OF_TEST_POSTS % settings.POSTS_PER_PAGE
 
         for page_number in range(number_of_full_pages):
             for url in tested_urls:
                 response = self.client.get(url, {'page': page_number + 1})
                 self.assertEqual(len(
                     response.context.get('page_obj').object_list
-                ), POSTS_PER_PAGE)
+                ), settings.POSTS_PER_PAGE)
         if number_of_posts_on_last_page:
             for url in tested_urls:
                 response = self.client.get(
